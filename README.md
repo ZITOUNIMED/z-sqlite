@@ -5,7 +5,7 @@ This project is an angular library for ionic applications. It simplifies data st
 ## Build The library and link to your ionic app
 You can clone the project, build it localy, link it to your local npm repository and use it in your ionic app.
 
-### Clone the project and buil it
+### Clone the project and build it
 $ git clone https://github.com/ZITOUNIMED/z-sqlite.git <br/>
 $ cd z-sqlite <br/>
 $ ng build  <br/>
