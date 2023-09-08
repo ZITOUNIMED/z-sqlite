@@ -1,6 +1,6 @@
 # Z-SQLite
 
-This project it's an angular library for ionic applications. It simplify data storage in local database on mobiles. It uses SQLite to store data in relational database.
+This project is an angular library for ionic applications. It simplifies data storage in local database on mobiles devices. It uses SQLite to store data in relational database.
 
 ## Build The library localy and link it to your ionic app
 
