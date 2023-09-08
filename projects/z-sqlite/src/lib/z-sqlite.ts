@@ -5,11 +5,14 @@ import { ZDataModel } from "./models/z-data-model";
 
 export class ZSQLite {
     private db?: SQLiteObject;
-    constructor(private isFake: boolean, private sqlite: SQLite,){}
+    private sqlite?: SQLite
+    private isFake: boolean = true;
+    constructor(){}
 
-    async init(isFake: boolean, config: SQLiteDatabaseConfig){
+    async init(isFake: boolean, sqlite: SQLite, config: SQLiteDatabaseConfig){
         this.isFake = isFake;
-        if(!isFake){
+        this.sqlite = sqlite;
+        if(!isFake && this.sqlite){
             this.db = await this.sqlite.create(config);
         }
     }
