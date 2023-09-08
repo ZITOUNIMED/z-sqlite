@@ -1,0 +1,10 @@
+{
+  "name": "z-sqlite",
+  "version": "0.0.3",
+  "peerDependencies": {
+    "@angular/common": "^16.2.0",
+    "@angular/core": "^16.2.0",
+    "@ionic-native/sqlite": "^5.36.0"
+  },
+  "sideEffects": false
+}
