@@ -2,15 +2,17 @@
 
 This project is an angular library for ionic applications. It simplifies data storage in local database on mobiles devices. It uses SQLite to store data in relational database.
 
-## Build The library localy and link it to your ionic app
+## Build The library and link to your ionic app
+You can clone the project, build it localy, link it to your local npm repository and use it in your ionic app.
+### Clone the project and buil it
+$ git clone https://github.com/ZITOUNIMED/z-sqlite.git
+$ cd z-sqlite
+$ ng build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Link the library to your local npm repository
 
-## Running unit tests
+### Use it in your angular ionic app.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Examples
+....
 
