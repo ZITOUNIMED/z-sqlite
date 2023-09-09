@@ -5,7 +5,7 @@ import { ZWrapperVersion } from "../models/z-wrapper-version";
 export class FakeDAO<Model> implements GenericLibDAO<Model> {
     
     itemsMap: Map<any, Model> = new Map();
-    constructor(private wrapper: ZWrapper,){
+    constructor(private wrapper: ZWrapper, private logFn?: any){
     }
 
     fetch(filters?: any, sorts?: any, page?: any): Promise<Model[]> {
@@ -57,14 +57,17 @@ export class FakeDAO<Model> implements GenericLibDAO<Model> {
             });
         }
 
+        if (this.logFn) this.logFn('Fake fetch Data', res);
         return Promise.resolve(res);
     }
 
     createTable(): Promise<boolean> {
+        if(this.logFn) this.logFn('Fake create Table ' + this.wrapper.tableName);
         return Promise.resolve(true)
     }
 
     async updateVersions(versions: ZWrapperVersion): Promise<boolean> {
+        if (this.logFn) this.logFn('Fake update versions', versions);
         return Promise.resolve(true);
     }
 
@@ -80,11 +83,13 @@ export class FakeDAO<Model> implements GenericLibDAO<Model> {
             newItem = {...item};
         }
         this.itemsMap.set(key, newItem);
+        if (this.logFn) this.logFn('Fake Add', newItem);
         return Promise.resolve(true);
     }
 
     findById(key: any): Promise<Model|undefined> {
         const found = this.itemsMap.get(key);
+        if (this.logFn) this.logFn('Fake find fy id', found);
         return Promise.resolve(found);
     }
 
@@ -92,16 +97,19 @@ export class FakeDAO<Model> implements GenericLibDAO<Model> {
         const column = this.wrapper.primaryKeyColumn;
         const key = {...{[column.name]: undefined}, ...model}[column.name];
         this.itemsMap.set(key, model);
+        if (this.logFn) this.logFn('Fake update', model);
         return Promise.resolve(true);
     }
 
     deleteById(key: any): Promise<boolean> {
         this.itemsMap.delete(key);
+        if (this.logFn) this.logFn('Fake delete by id', key);
         return Promise.resolve(true); 
     }
 
     deleteAll(): Promise<boolean> {
         this.itemsMap = new Map();
+        if (this.logFn) this.logFn('Fake delete all');
         return Promise.resolve(true);
     }
 }

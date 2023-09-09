@@ -1,24 +1,34 @@
 import { SQLite, SQLiteDatabaseConfig, SQLiteObject } from "@ionic-native/sqlite/ngx";
-import { ZWrapper } from "./models/z-wrapper";
 import { ZModel } from "./models/z-model";
-import { ZDataModel } from "./models/z-data-model";
 
 export class ZSQLite {
     private db?: SQLiteObject;
     private sqlite?: SQLite
     private isFake: boolean = true;
-    constructor(){}
+    private logFn?: any;
 
-    async init(isFake: boolean, sqlite: SQLite, config: SQLiteDatabaseConfig){
+    constructor(private models: ZModel<any>[]){}
+
+    async init(isFake: boolean, sqlite: SQLite, config: SQLiteDatabaseConfig, enableLog?: boolean, logFn?: any){
+        if(enableLog){
+            this.logFn = logFn;
+        }
+        this.logFn = logFn;
         this.isFake = isFake;
         this.sqlite = sqlite;
+
+        if(this.logFn) this.logFn('INIT DB: ', `IS FAKE? ${isFake}`);
+        if(this.logFn) this.logFn('INIT DB: dependency present? '+`${!!this.sqlite}`,);
+        
         if(!isFake && this.sqlite){
             this.db = await this.sqlite.create(config);
+            if(this.logFn) this.logFn('INIT DB: SUCCESS CREATION DB');
+        } else {
+            if(this.logFn) this.logFn('INIT DB: SUCCESS CREATION FAKE DB');
         }
-    }
 
-    model<Model>(wrapper: ZWrapper, data?: ZDataModel<Model>): ZModel<Model> {
-        const model = new ZModel<Model>(wrapper, this.isFake, this.db, data);
-        return model;
+        for(let i = 0; i<this.models.length; i++){
+            await this.models[i].init(this.isFake, this.db, this.logFn)
+        }
     }
 }

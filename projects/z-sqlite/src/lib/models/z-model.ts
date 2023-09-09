@@ -10,18 +10,26 @@ import { ZDataModel } from "./z-data-model";
 export class ZModel<Model> implements GenericDAO<Model> {
     private dao: GenericLibDAO<Model>;
     private isFake: boolean = true;
+    private logFn?: any;
 
-    constructor(wrapper: ZWrapper, isFake: boolean, db?: SQLiteObject, data?: {db?: Model[], fake?:Model[]}) {
+    constructor(private wrapper: ZWrapper, private data?: ZDataModel<Model>) {
+        this.dao = new FakeDAO<Model>(wrapper);
+    }
+
+    init(isFake: boolean, db?: SQLiteObject, logFn?: any){
+        this.logFn = logFn;
         this.isFake = isFake;
-        if(!isFake && db){
-            this.dao = new DbDAO<Model>(wrapper, db);
 
+        if(!isFake && db){
+            if(this.logFn) this.logFn('CREATE NEW DB DAO: SUCCESS',);
+            this.dao = new DbDAO<Model>(this.wrapper, db, this.logFn);
         } else {
-            this.dao = new FakeDAO<Model>(wrapper);
+            if(this.logFn) this.logFn('CREATE NEW FAKE DAO: SUCCESS',);
+            this.dao = new FakeDAO<Model>(this.wrapper, this.logFn);
         }
 
         this.dao.createTable().then();
-        this.initData(data);
+        this.initData(this.data).then();
     }
 
     updateVersions(versions: ZWrapperVersion): Promise<boolean> {
