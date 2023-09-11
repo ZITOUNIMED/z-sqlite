@@ -1,7 +1,6 @@
 /*
  * Public API Surface of z-sqlite
  */
-import './main';
 
 export * from './lib/z-sqlite';
 export * from './lib/models/z-model';

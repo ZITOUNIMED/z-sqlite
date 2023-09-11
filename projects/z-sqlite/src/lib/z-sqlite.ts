@@ -17,14 +17,11 @@ export class ZSQLite {
         this.isFake = isFake;
         this.sqlite = sqlite;
 
-        if(this.logFn) this.logFn('INIT DB: ', `IS FAKE? ${isFake}`);
-        if(this.logFn) this.logFn('INIT DB: dependency present? '+`${!!this.sqlite}`,);
+        if(this.isFake && this.logFn) this.logFn('INIT FAKE DB.');
         
         if(!isFake && this.sqlite){
             this.db = await this.sqlite.create(config);
-            if(this.logFn) this.logFn('INIT DB: SUCCESS CREATION DB');
-        } else {
-            if(this.logFn) this.logFn('INIT DB: SUCCESS CREATION FAKE DB');
+            if(this.logFn) this.logFn('INIT DB: SUCCESS CREATION DB.');
         }
 
         for(let i = 0; i<this.models.length; i++){
