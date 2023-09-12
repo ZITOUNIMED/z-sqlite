@@ -16,7 +16,7 @@ export class ZModel<Model> implements GenericDAO<Model> {
         this.dao = new FakeDAO<Model>(wrapper);
     }
 
-    init(isFake: boolean, db?: SQLiteObject, logFn?: any){
+    async init(isFake: boolean, db?: SQLiteObject, logFn?: any){
         this.logFn = logFn;
         this.isFake = isFake;
 
@@ -28,8 +28,8 @@ export class ZModel<Model> implements GenericDAO<Model> {
             this.dao = new FakeDAO<Model>(this.wrapper, this.logFn);
         }
 
-        this.dao.createTable().then();
-        this.initData(this.data).then();
+        await this.dao.createTable();
+        await this.initData(this.data);
     }
 
     updateVersions(versions: ZWrapperVersion): Promise<boolean> {
@@ -49,11 +49,11 @@ export class ZModel<Model> implements GenericDAO<Model> {
     }
 
     deleteById(key: any): Promise<boolean> {
-        return this.deleteById(key);
+        return this.dao.deleteById(key);
     }
 
     deleteAll(): Promise<boolean> {
-        return this.deleteAll();
+        return this.dao.deleteAll();
     }
 
     fetch(filters?: any, sorts?: any, page?: any): Promise<Model[]> {

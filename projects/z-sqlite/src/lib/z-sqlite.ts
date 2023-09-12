@@ -28,4 +28,11 @@ export class ZSQLite {
             await this.models[i].init(this.isFake, this.db, this.logFn)
         }
     }
+
+    executeQuery(query: string) {
+        if(this.db){
+            return this.db.executeSql(query);
+        }
+        return Promise.reject({error: 'db is down'});
+    }
 }
