@@ -87,7 +87,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
         })
          .catch((e: any) => {
             if (this.errorLogFn) this.errorLogFn('Update version error: ', e);
-            return Promise.reject(false)
+            return Promise.resolve(false)
         });
      }
  
@@ -102,7 +102,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          })
          .catch((e: any) => {
             if (this.errorLogFn) this.errorLogFn('Add Error: ', e);
-            return Promise.reject(false);
+            return Promise.resolve(false);
         });
      }
  
@@ -117,7 +117,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          })
          .catch((e: any) => {
             if (this.errorLogFn) this.errorLogFn('Fetch error: ', e);
-            return Promise.reject(false)
+            return Promise.resolve(false)
          });
      }
  
@@ -132,7 +132,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          })
          .catch((e: any) => {
             if (this.successLogFn) this.successLogFn('find By ID error: ', e);
-           return Promise.reject(false);
+           return Promise.resolve(false);
          });
      }
  
@@ -147,7 +147,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          })
          .catch((e: any) => {
             if (this.errorLogFn) this.errorLogFn('Update error: ', e);
-           return Promise.reject(false);
+           return Promise.resolve(false);
          });
      }
  
@@ -162,7 +162,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          })
          .catch((e: any) => {
             if (this.errorLogFn) this.errorLogFn('Delete by id error: ', e);
-           return Promise.reject(false);
+           return Promise.resolve(false);
          });
      }
  
@@ -177,7 +177,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          })
          .catch((e: any) => {
             if (this.errorLogFn) this.errorLogFn('Delete all error: ', e);
-           return Promise.reject(false)
+           return Promise.resolve(false)
          });
      }
  
@@ -196,17 +196,17 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          })
          .catch((e: any) => {
             if (this.errorLogFn) this.errorLogFn('create table error: ', e);
-           return Promise.reject(false)
+           return Promise.resolve(false)
          });
      }
 
      private isTableAlreadyExists(): Promise<boolean>{
         return this.db.executeSql(`SELECT COUNT(*) FROM ${this.wrapper.tableName};`)
         .then(res =>{
-            return res && res.rows
+            return !!(res && res.rows)
         })
         .catch(() => {
-            return Promise.reject(false);
+            return Promise.resolve(false);
         })
      }
      
