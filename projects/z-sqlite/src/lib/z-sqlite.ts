@@ -5,28 +5,31 @@ export class ZSQLite {
     private db?: SQLiteObject;
     private sqlite?: SQLite
     private isFake: boolean = true;
-    private logFn?: any;
+    private successLogFn?: any;
+    private errorLogFn?: any;
 
     constructor(private models: ZModel<any>[]){}
 
-    async init(isFake: boolean, sqlite: SQLite, config: SQLiteDatabaseConfig, enableLog?: boolean, logFn?: any){
+    async init(isFake: boolean, sqlite: SQLite, config: SQLiteDatabaseConfig, dbUpCallBack?: any, enableLog?: boolean, successLogFn?: any, errorLogFn?: any){
         if(enableLog){
-            this.logFn = logFn;
+            this.successLogFn = successLogFn;
+            this.errorLogFn = errorLogFn;
         }
-        this.logFn = logFn;
         this.isFake = isFake;
         this.sqlite = sqlite;
 
-        if(this.isFake && this.logFn) this.logFn('INIT FAKE DB.');
+        if(this.isFake && this.successLogFn) this.successLogFn('INIT FAKE DB.');
         
         if(!isFake && this.sqlite){
             this.db = await this.sqlite.create(config);
-            if(this.logFn) this.logFn('INIT DB: SUCCESS CREATION DB.');
+            if(this.successLogFn) this.successLogFn('INIT DB: SUCCESS CREATION DB.');
         }
 
         for(let i = 0; i<this.models.length; i++){
-            await this.models[i].init(this.isFake, this.db, this.logFn)
+            await this.models[i].init(this.isFake, this.db, this.successLogFn, this.errorLogFn)
         }
+        
+        if(dbUpCallBack) dbUpCallBack();
     }
 
     executeQuery(query: string) {

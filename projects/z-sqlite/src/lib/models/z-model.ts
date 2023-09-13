@@ -10,22 +10,24 @@ import { ZDataModel } from "./z-data-model";
 export class ZModel<Model> implements GenericDAO<Model> {
     private dao: GenericLibDAO<Model>;
     private isFake: boolean = true;
-    private logFn?: any;
+    private successLogFn?: any;
+    private errorLogFn?: any;
 
     constructor(private wrapper: ZWrapper, private data?: ZDataModel<Model>) {
         this.dao = new FakeDAO<Model>(wrapper);
     }
 
-    async init(isFake: boolean, db?: SQLiteObject, logFn?: any){
-        this.logFn = logFn;
+    async init(isFake: boolean, db?: SQLiteObject, successLogFn?: any, errorLogFn?: any){
+        this.successLogFn = successLogFn;
+        this.errorLogFn = errorLogFn;
         this.isFake = isFake;
 
         if(!isFake && db){
-            if(this.logFn) this.logFn('CREATE NEW DB DAO: SUCCESS',);
-            this.dao = new DbDAO<Model>(this.wrapper, db, this.logFn);
+            if(this.successLogFn) this.successLogFn('CREATE NEW DB DAO: SUCCESS',);
+            this.dao = new DbDAO<Model>(this.wrapper, db, this.successLogFn, this.errorLogFn);
         } else {
-            if(this.logFn) this.logFn('CREATE NEW FAKE DAO: SUCCESS',);
-            this.dao = new FakeDAO<Model>(this.wrapper, this.logFn);
+            if(this.successLogFn) this.successLogFn('CREATE NEW FAKE DAO: SUCCESS',);
+            this.dao = new FakeDAO<Model>(this.wrapper, this.successLogFn, this.errorLogFn);
         }
 
         await this.dao.createTable();

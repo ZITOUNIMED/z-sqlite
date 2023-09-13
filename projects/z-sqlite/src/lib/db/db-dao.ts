@@ -8,7 +8,7 @@ import { ZWrapperVersionColum } from "../models/z-wrapper-version-column";
 export class DbDAO<Model> implements GenericLibDAO<Model> {
     private queryBuilder: ZQueryBuilder;
 
-    constructor(private wrapper: ZWrapper, private db: SQLiteObject, private logFn?: any){
+    constructor(private wrapper: ZWrapper, private db: SQLiteObject, private successLogFn?: any, private errorLogFn?: any){
         this.queryBuilder = new ZQueryBuilder(this.wrapper);
     }
  
@@ -26,7 +26,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
         for (let i = 0; i < res.rows.length; i++) {
              items.push(res.rows.item(i));
         }
-        if (this.logFn) this.logFn('Fetch result: ', items);
+        if (this.successLogFn) this.successLogFn('Fetch result: ', items);
         return Promise.resolve(items); 
      }
  
@@ -55,7 +55,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
               items.push(res.rows.item(i));
          }
          if(items.length>0){
-            if (this.logFn) this.logFn('Find by id result', items[0]);
+            if (this.successLogFn) this.successLogFn('Find by id result', items[0]);
              return Promise.resolve(items[0]);
          }
          return Promise.resolve(undefined);
@@ -78,121 +78,136 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
      }
  
      private updateVersionDb(query: string): Promise<boolean> {
-        if (this.logFn) this.logFn('Update version query: ', query);
+        if (this.successLogFn) this.successLogFn('Update version query: ', query);
          return this.db
          .executeSql(query, [])
          .then(() => {
-            if (this.logFn) this.logFn('Update version success', );
+            if (this.successLogFn) this.successLogFn('Update version success', );
             return Promise.resolve(true);
         })
          .catch((e: any) => {
-            if (this.logFn) this.logFn('Update version error: ', e);
+            if (this.errorLogFn) this.errorLogFn('Update version error: ', e);
             return Promise.reject(false)
         });
      }
  
      private addDb(item: Model): Promise<boolean> {
          const query = this.queryBuilder.buildAddItemQuery(item);
-         if (this.logFn) this.logFn('Add query', query);
+         if (this.successLogFn) this.successLogFn('Add query', query);
          return this.db
          .executeSql(query, [])
          .then(() => {
-            if (this.logFn) this.logFn('Add success', );
+            if (this.successLogFn) this.successLogFn('Add success', );
              return Promise.resolve(true);
          })
          .catch((e: any) => {
-            if (this.logFn) this.logFn('Add Error: ', e);
+            if (this.errorLogFn) this.errorLogFn('Add Error: ', e);
             return Promise.reject(false);
         });
      }
  
      private advancedFilterDb(filterColumns?: Map<string, any>, sortColumns?: Map<string, any>, page?: any): Promise<any> {
          const query = this.queryBuilder.buildAdvancedFilterQuery(filterColumns, sortColumns, page);
-         if (this.logFn) this.logFn('fetch query', query);
+         if (this.successLogFn) this.successLogFn('fetch query', query);
          return this.db
          .executeSql(query, [])
          .then((res: any) => {
-            if (this.logFn) this.logFn('Fetch success', );
+            if (this.successLogFn) this.successLogFn('Fetch success', );
              return res;
          })
          .catch((e: any) => {
-            if (this.logFn) this.logFn('Fetch error: ', e);
+            if (this.errorLogFn) this.errorLogFn('Fetch error: ', e);
             return Promise.reject(false)
          });
      }
  
      private getByIdDb(key: any): Promise<any> {
          const query = this.queryBuilder.buildGetByPrimaryKeyQuery(key);
-         if (this.logFn) this.logFn('Find By ID Query: ', query);
+         if (this.successLogFn) this.successLogFn('Find By ID Query: ', query);
          return this.db
          .executeSql(query, [])
          .then((res: any) => {
-            if (this.logFn) this.logFn('Find By ID success', );
+            if (this.successLogFn) this.successLogFn('Find By ID success', );
              return res;
          })
          .catch((e: any) => {
-            if (this.logFn) this.logFn('find By ID error: ', e);
+            if (this.successLogFn) this.successLogFn('find By ID error: ', e);
            return Promise.reject(false);
          });
      }
  
      private updateDb(item: Model): Promise<boolean> {
          const query = this.queryBuilder.buildUpdateItemQuery(item);
-         if (this.logFn) this.logFn('Update Query: ', query);
+         if (this.successLogFn) this.successLogFn('Update Query: ', query);
          return this.db
          .executeSql(query, [])
          .then(() => {
-            if (this.logFn) this.logFn('Update success', );
+            if (this.successLogFn) this.successLogFn('Update success', );
              return Promise.resolve(true)
          })
          .catch((e: any) => {
-            if (this.logFn) this.logFn('Update error: ', e);
+            if (this.errorLogFn) this.errorLogFn('Update error: ', e);
            return Promise.reject(false);
          });
      }
  
      private deleteByIdDb(key: any): Promise<boolean> {
          const query = this.queryBuilder.buildDeleteItemQuery(key);
-         if (this.logFn) this.logFn('Delete By Id Query', query);
+         if (this.successLogFn) this.successLogFn('Delete By Id Query', query);
          return this.db
          .executeSql(query, [])
          .then(() => {
-            if (this.logFn) this.logFn('Delete By ID success', );
+            if (this.successLogFn) this.successLogFn('Delete By ID success', );
              return Promise.resolve(true)
          })
          .catch((e: any) => {
-            if (this.logFn) this.logFn('Delete by id error: ', e);
+            if (this.errorLogFn) this.errorLogFn('Delete by id error: ', e);
            return Promise.reject(false);
          });
      }
  
      private deleteAllDb(): Promise<boolean> {
          const query = this.queryBuilder.buildDeleteAllItemsQuery();
-         if (this.logFn) this.logFn('Delete All Query: ', query);
+         if (this.successLogFn) this.successLogFn('Delete All Query: ', query);
          return this.db
          .executeSql(query, [])
          .then(() => {
-            if (this.logFn) this.logFn('Delete all success', );
+            if (this.successLogFn) this.successLogFn('Delete all success', );
              return Promise.resolve(true)
          })
          .catch((e: any) => {
-            if (this.logFn) this.logFn('Delete all error: ', e);
+            if (this.errorLogFn) this.errorLogFn('Delete all error: ', e);
            return Promise.reject(false)
          });
      }
  
-     private createTableDb(): Promise<boolean> {
+     private async createTableDb(): Promise<boolean> {
+         const isExists = await this.isTableAlreadyExists();
+         if(isExists){
+            return Promise.resolve(true)
+         }
          const query = this.queryBuilder.buildCreateTableQuery();
-         if (this.logFn) this.logFn(`Create table ${this.wrapper.tableName} Query: `, query);
+         if (this.successLogFn) this.successLogFn(`Create table ${this.wrapper.tableName} Query: `, query);
          return this.db
          .executeSql(query, [])
          .then(() => {
-            if (this.logFn) this.logFn(`Create table ${this.wrapper.tableName} success.`);
+            if (this.successLogFn) this.successLogFn(`Create table ${this.wrapper.tableName} success.`);
              return Promise.resolve(true);
          })
          .catch((e: any) => {
-            if (this.logFn) this.logFn('create table error: ', e);
+            if (this.errorLogFn) this.errorLogFn('create table error: ', e);
            return Promise.reject(false)
          });
      }
+
+     private isTableAlreadyExists(): Promise<boolean>{
+        return this.db.executeSql(`SELECT COUNT(*) FROM ${this.wrapper.tableName};`)
+        .then(res =>{
+            return res && res.rows
+        })
+        .catch(() => {
+            return Promise.reject(false);
+        })
+     }
+     
 }
