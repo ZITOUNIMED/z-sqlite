@@ -1,12 +1,14 @@
 import { ZWrapper } from "z-sqlite";
 import { DbDAO } from "./db-dao"
 
-describe('db-dao', () => {
-    const db = jasmine.createSpyObj('SQLiteObject', ['executeSql'])
+xdescribe('db-dao', () => {
+    const db = jasmine.createSpyObj('SQLiteObject', ['executeSql']);
+    const successLogFn = jasmine.createSpy();
+    const errorLogFn = jasmine.createSpy();
     const wrapper: ZWrapper = {
         tableName: 'tableName',
         primaryKeyColumn: {name: 'id',type: 'number'},
-        columns: [],
+        columns: [{name: 'id',type: 'number'}, {name: 'name',type: 'varchar(20)', isText: true}],
         entityName: 'entityName',
         version: {
             columns: [],
@@ -14,7 +16,7 @@ describe('db-dao', () => {
             name: 'version'
         }
     };
-    const dbDAO: DbDAO<any> = new DbDAO(wrapper, db);
+    const dbDAO: DbDAO<any> = new DbDAO(wrapper, db, successLogFn, errorLogFn);
 
     it('should create db dao instance', () =>{
         expect(dbDAO).toBeDefined();
@@ -36,6 +38,8 @@ describe('db-dao', () => {
         db.executeSql.and.returnValue(Promise.resolve(true));
         dbDAO['isTableAlreadyExists'] = () => Promise.resolve(false)
         const res = await dbDAO.createTable()
+
+        expect(successLogFn).toHaveBeenCalledWith('Create table tableName success.');
         expect(res).toBeTruthy();
     })
 

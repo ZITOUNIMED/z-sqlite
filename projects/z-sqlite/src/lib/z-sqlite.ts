@@ -10,11 +10,12 @@ export class ZSQLite {
 
     constructor(private models: ZModel<any>[]){}
 
-    async init(isFake: boolean, sqlite: SQLite, config: SQLiteDatabaseConfig, dbUpCallBack?: any, enableLog?: boolean, successLogFn?: any, errorLogFn?: any){
-        if(enableLog){
+    async init(isFake: boolean, sqlite: SQLite, config: SQLiteDatabaseConfig, dbUpCallBack?: any, isLogEnabled?: boolean, successLogFn?: any, errorLogFn?: any){
+        if(isLogEnabled){
             this.successLogFn = successLogFn;
             this.errorLogFn = errorLogFn;
         }
+    
         this.isFake = isFake;
         this.sqlite = sqlite;
 
