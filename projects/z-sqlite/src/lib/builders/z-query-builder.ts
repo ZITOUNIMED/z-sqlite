@@ -27,6 +27,10 @@ export class ZQueryBuilder {
         return `CREATE TABLE IF NOT EXISTS ${this.wrapper.tableName} ( ${query} ); COMMIT;`;
     }
 
+    buildIsAlreadyExistingTableQuery(): string {
+        return `SELECT count(*) FROM ${this.wrapper.tableName};`;
+    }
+
     buildAddItemQuery(itemValue: any): string {
         let q1 = '';
         let q2 = '';
