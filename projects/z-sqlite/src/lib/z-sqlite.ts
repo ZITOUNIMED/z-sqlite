@@ -26,6 +26,8 @@ export class ZSQLite {
             if(this.successLogFn) this.successLogFn('INIT DB: SUCCESS CREATION DB.');
         }
 
+        if(this.successLogFn) this.successLogFn(`${this.models.length} models found.`)
+
         for(let i = 0; i<this.models.length; i++){
             await this.models[i].init(this.isFake, this.db, this.successLogFn, this.errorLogFn)
         }
