@@ -34,11 +34,4 @@ export class ZSQLite {
         
         if(dbUpCallBack) dbUpCallBack();
     }
-
-    executeQuery(query: string) {
-        if(this.db){
-            return this.db.executeSql(query);
-        }
-        return Promise.reject({error: 'db is down'});
-    }
 }

@@ -80,7 +80,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
      private updateVersionDb(query: string): Promise<boolean> {
         if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Update Version Query:`, query);
          return this.db
-         .executeSql(query)
+         .executeSql(query, [])
          .then(() => {
             if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Update Version Success.`);
             return true
@@ -95,7 +95,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          const query = this.queryBuilder.buildAddItemQuery(item);
          if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Add Query:`, query);
          return this.db
-         .executeSql(query)
+         .executeSql(query, [])
          .then(() => {
             if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Add Success.`);
              return true;
@@ -110,7 +110,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          const query = this.queryBuilder.buildAdvancedFilterQuery(filterColumns, sortColumns, page);
          if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Fetch Query:`, query);
          return this.db
-         .executeSql(query)
+         .executeSql(query, [])
          .then((res: any) => {
             if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Fetch Success.`);
              return res;
@@ -125,7 +125,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          const query = this.queryBuilder.buildGetByPrimaryKeyQuery(key);
          if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Find By Id Query:`, query);
          return this.db
-         .executeSql(query)
+         .executeSql(query, [])
          .then((res: any) => {
             if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Find By Id Success.`);
             return res;
@@ -140,7 +140,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          const query = this.queryBuilder.buildUpdateItemQuery(item);
          if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Update Query:`, query);
          return this.db
-         .executeSql(query)
+         .executeSql(query, [])
          .then(() => {
             if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Update Success.`);
              return true
@@ -155,7 +155,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          const query = this.queryBuilder.buildDeleteItemQuery(key);
          if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Qelete By Id Query:`, query);
          return this.db
-         .executeSql(query)
+         .executeSql(query, [])
          .then(() => {
             if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Delete By Id Success.`);
              return true
@@ -170,7 +170,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          const query = this.queryBuilder.buildDeleteAllItemsQuery();
          if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Delete All Query:`, query);
          return this.db
-         .executeSql(query)
+         .executeSql(query,[])
          .then(() => {
             if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Delete All Success.`);
              return true
@@ -191,7 +191,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          const query = this.queryBuilder.buildCreateTableQuery();
          if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Create table Query:`, query);
          return this.db
-         .executeSql(query)
+         .executeSql(query,[])
          .then(() => {
             if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Create table success.`);
              return true
@@ -206,7 +206,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
         // const query = this.queryBuilder.buildIsAlreadyExistingTableQuery();
         /*let res = undefined;
         try {
-            res = await this.db.executeSql(query)
+            res = await this.db.executeSql(query,[])
             .then((res: any) => {
                 if (this.successLogFn) this.successLogFn(`Success check table existing ${this.wrapper.tableName}`);
                 return res;
