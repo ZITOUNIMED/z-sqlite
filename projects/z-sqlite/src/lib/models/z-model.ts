@@ -23,10 +23,10 @@ export class ZModel<Model> implements GenericDAO<Model> {
         this.isFake = isFake;
 
         if(!isFake && db){
-            if(this.successLogFn) this.successLogFn('CREATE NEW DB DAO: SUCCESS',);
+            if(this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Create new Db DAO.`);
             this.dao = new DbDAO<Model>(this.wrapper, db, this.successLogFn, this.errorLogFn);
         } else {
-            if(this.successLogFn) this.successLogFn('CREATE NEW FAKE DAO: SUCCESS',);
+            if(this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Create new Fake DAO.`)
             this.dao = new FakeDAO<Model>(this.wrapper, this.successLogFn, this.errorLogFn);
         }
 
@@ -65,11 +65,13 @@ export class ZModel<Model> implements GenericDAO<Model> {
     private async initData(data?: ZDataModel<Model>){
         if(data){
             if(data.required){
+                if(this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Init Required Data...`)
                 for(let i = 0; i<data.required.length; i++){
                     await this.dao.add(data.required[i])
                 }
             }
             if(this.isFake && data.fake){
+                if(this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Init Fake Data...`)
                 for(let i = 0; i<data.fake.length; i++){
                     await this.dao.add(data.fake[i])
                 }
