@@ -26,7 +26,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
         for (let i = 0; i < res.rows.length; i++) {
              items.push(res.rows.item(i));
         }
-        if (this.successLogFn) this.successLogFn('Fetch result: ', items);
+        if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Fetch Result:`, items);
         return Promise.resolve(items); 
      }
  
@@ -55,7 +55,7 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
               items.push(res.rows.item(i));
          }
          if(items.length>0){
-            if (this.successLogFn) this.successLogFn('Find by id result', items[0]);
+            if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Find By ID Result:`, items[0]);
              return Promise.resolve(items[0]);
          }
          return Promise.resolve(undefined);
@@ -78,106 +78,106 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
      }
  
      private updateVersionDb(query: string): Promise<boolean> {
-        if (this.successLogFn) this.successLogFn('Update version query: ', query);
+        if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Update Version Query:`, query);
          return this.db
          .executeSql(query)
          .then(() => {
-            if (this.successLogFn) this.successLogFn('Update version success', );
-            return Promise.resolve(true);
+            if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Update Version Success.`);
+            return true
         })
          .catch((e: any) => {
-            if (this.errorLogFn) this.errorLogFn('Update version error: ', e);
-            return Promise.resolve(false)
+            if (this.errorLogFn) this.errorLogFn(`${this.wrapper.tableName}: Update Version Error:`, e);
+            return false;
         });
      }
  
      private addDb(item: Model): Promise<boolean> {
          const query = this.queryBuilder.buildAddItemQuery(item);
-         if (this.successLogFn) this.successLogFn('Add query', query);
+         if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Add Query:`, query);
          return this.db
          .executeSql(query)
          .then(() => {
-            if (this.successLogFn) this.successLogFn('Add success', );
-             return Promise.resolve(true);
+            if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Add Success.`);
+             return true;
          })
          .catch((e: any) => {
-            if (this.errorLogFn) this.errorLogFn('Add Error: ', e);
-            return Promise.resolve(false);
+            if (this.errorLogFn) this.errorLogFn(`${this.wrapper.tableName}: Add Error:`, e);
+            return false;
         });
      }
  
      private advancedFilterDb(filterColumns?: Map<string, any>, sortColumns?: Map<string, any>, page?: any): Promise<any> {
          const query = this.queryBuilder.buildAdvancedFilterQuery(filterColumns, sortColumns, page);
-         if (this.successLogFn) this.successLogFn('fetch query', query);
+         if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Fetch Query:`, query);
          return this.db
          .executeSql(query)
          .then((res: any) => {
-            if (this.successLogFn) this.successLogFn('Fetch success', );
+            if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Fetch Success.`);
              return res;
          })
          .catch((e: any) => {
-            if (this.errorLogFn) this.errorLogFn('Fetch error: ', e);
-            return Promise.resolve(false)
+            if (this.errorLogFn) this.errorLogFn(`${this.wrapper.tableName}: Fetch Error:`, e);
+            return false
          });
      }
  
      private getByIdDb(key: any): Promise<any> {
          const query = this.queryBuilder.buildGetByPrimaryKeyQuery(key);
-         if (this.successLogFn) this.successLogFn('Find By ID Query: ', query);
+         if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Find By Id Query:`, query);
          return this.db
          .executeSql(query)
          .then((res: any) => {
-            if (this.successLogFn) this.successLogFn('Find By ID success');
-             return res;
+            if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Find By Id Success.`);
+            return res;
          })
          .catch((e: any) => {
-            if (this.successLogFn) this.successLogFn('find By ID error: ', e);
-           return Promise.resolve(false);
+            if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Find By Id Error:`, e);
+           return false
          });
      }
  
      private updateDb(item: Model): Promise<boolean> {
          const query = this.queryBuilder.buildUpdateItemQuery(item);
-         if (this.successLogFn) this.successLogFn('Update Query: ', query);
+         if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Update Query:`, query);
          return this.db
          .executeSql(query)
          .then(() => {
-            if (this.successLogFn) this.successLogFn('Update success', );
-             return Promise.resolve(true)
+            if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Update Success.`);
+             return true
          })
          .catch((e: any) => {
-            if (this.errorLogFn) this.errorLogFn('Update error: ', e);
-           return Promise.resolve(false);
+            if (this.errorLogFn) this.errorLogFn(`${this.wrapper.tableName}: Update Error:`, e);
+           return false
          });
      }
  
      private deleteByIdDb(key: any): Promise<boolean> {
          const query = this.queryBuilder.buildDeleteItemQuery(key);
-         if (this.successLogFn) this.successLogFn('Delete By Id Query', query);
+         if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Qelete By Id Query:`, query);
          return this.db
          .executeSql(query)
          .then(() => {
-            if (this.successLogFn) this.successLogFn('Delete By ID success', );
-             return Promise.resolve(true)
+            if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Delete By Id Success.`);
+             return true
          })
          .catch((e: any) => {
-            if (this.errorLogFn) this.errorLogFn('Delete by id error: ', e);
-           return Promise.resolve(false);
+            if (this.errorLogFn) this.errorLogFn(`${this.wrapper.tableName}: Delete By Id Error:`, e);
+           return false
          });
      }
  
      private deleteAllDb(): Promise<boolean> {
          const query = this.queryBuilder.buildDeleteAllItemsQuery();
-         if (this.successLogFn) this.successLogFn('Delete All Query: ', query);
+         if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Delete All Query:`, query);
          return this.db
          .executeSql(query)
          .then(() => {
-            if (this.successLogFn) this.successLogFn('Delete all success', );
-             return Promise.resolve(true)
+            if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Delete All Success.`);
+             return true
          })
          .catch((e: any) => {
-            if (this.errorLogFn) this.errorLogFn('Delete all error: ', e);
-           return Promise.resolve(false)
+            if (this.errorLogFn) this.errorLogFn(`${this.wrapper.tableName}: Delete All Error:`, e);
+           return false
          });
      }
  
@@ -187,25 +187,34 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
          if(isExists){
             return Promise.resolve(true)
          }
+
          const query = this.queryBuilder.buildCreateTableQuery();
-         if (this.successLogFn) this.successLogFn(`Create table ${this.wrapper.tableName} Query: `, query);
+         if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Create table Query:`, query);
          return this.db
          .executeSql(query)
          .then(() => {
-            if (this.successLogFn) this.successLogFn(`Create table ${this.wrapper.tableName} success.`);
-             return Promise.resolve(true);
+            if (this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Create table success.`);
+             return true
          })
          .catch((e: any) => {
-            if (this.errorLogFn) this.errorLogFn('create table error: ', e);
-           return Promise.resolve(false)
+            if (this.errorLogFn) this.errorLogFn(`${this.wrapper.tableName}: Create table error:`, e);
+           return false
          });
      }
 
      private async isTableAlreadyExists(): Promise<boolean>{
-        const query = this.queryBuilder.buildIsAlreadyExistingTableQuery();
-        let res = undefined;
+        // const query = this.queryBuilder.buildIsAlreadyExistingTableQuery();
+        /*let res = undefined;
         try {
-            res = await this.db.executeSql(query);
+            res = await this.db.executeSql(query)
+            .then((res: any) => {
+                if (this.successLogFn) this.successLogFn(`Success check table existing ${this.wrapper.tableName}`);
+                return res;
+            })
+            .catch(e => {
+                if (this.successLogFn) this.successLogFn(`Error while check table exisiting ${this.wrapper.tableName}`);
+                return false;
+            });
         } catch {
             res = undefined;
         }
@@ -213,8 +222,8 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
         if(res && res.rows){
             if(this.successLogFn) this.successLogFn(`Table ${this.wrapper.tableName} is already existing.`)
             return Promise.resolve(true);
-        }
-        if(this.successLogFn) this.successLogFn(`Table ${this.wrapper.tableName} is not exisiting.`)
+        }*/
+        if(this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Table is not exisiting.`)
         return Promise.resolve(false);
      }
      
