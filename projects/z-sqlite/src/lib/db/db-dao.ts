@@ -203,10 +203,8 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
      }
 
      private async isTableAlreadyExists(): Promise<boolean>{
-        // const query = this.queryBuilder.buildIsAlreadyExistingTableQuery();
-        /*let res = undefined;
-        try {
-            res = await this.db.executeSql(query,[])
+        const query = this.queryBuilder.buildIsAlreadyExistingTableQuery();
+        const result = await this.db.executeSql(query,[])
             .then((res: any) => {
                 if (this.successLogFn) this.successLogFn(`Success check table existing ${this.wrapper.tableName}`);
                 return res;
@@ -215,14 +213,11 @@ export class DbDAO<Model> implements GenericLibDAO<Model> {
                 if (this.successLogFn) this.successLogFn(`Error while check table exisiting ${this.wrapper.tableName}`);
                 return false;
             });
-        } catch {
-            res = undefined;
-        }
         
-        if(res && res.rows){
+        if(result && result.rows){
             if(this.successLogFn) this.successLogFn(`Table ${this.wrapper.tableName} is already existing.`)
             return Promise.resolve(true);
-        }*/
+        }
         if(this.successLogFn) this.successLogFn(`${this.wrapper.tableName}: Table is not exisiting.`)
         return Promise.resolve(false);
      }
